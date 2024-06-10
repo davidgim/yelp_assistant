@@ -1,0 +1,47 @@
+<p>search-form works!</p>
+<mat-toolbar color="primary">Yelping Hand</mat-toolbar>
+<div class="container">
+    <form (ngSubmit)="handleSearch()">
+        <mat-form-field class="example-full-width">
+            <mat-label>State</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoState" [(ngModel)]="state" name="state" (input)="filterStates()">
+            <mat-autocomplete #autoState="matAutocomplete">
+                <mat-option *ngFor="let option of filteredStates" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>City</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoCity" [(ngModel)]="city" name="city" (input)="filteredCities()">
+            <mat-autocomplete #autoState="matAutocomplete">
+                <mat-option *ngFor="let option of filteredCities" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Category</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoCategory" [(ngModel)]="category" (input)="filterCategories()">
+            <mat-autocomplete #autoCategory="matAutocomplete">
+                <mat-option *ngFor="let option of filteredCategories" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Business Name</mat-label>
+            <input type="text" matInput [matAutcomplete]="autoBusiness" [(ngModel)]="businessName" name="businessName" (input)="filterBusinessNames()">
+            <mat-autocomplete #autoCategory="matAutocomplete">
+                <mat-option *ngFor="let option of filteredBusinesses" [value]="option.name">
+                    {{ option.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">Search</button>
+    </form>
+</div>
