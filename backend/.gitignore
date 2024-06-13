@@ -1,4 +1,5 @@
 .env
+<<<<<<< HEAD
 
 __pycache__/
 *.pyc
@@ -6,3 +7,6 @@ __pycache__/
 app/config.py
 
 *.log
+=======
+config.py
+>>>>>>> 8664d07 (Added gitignore for backend)
