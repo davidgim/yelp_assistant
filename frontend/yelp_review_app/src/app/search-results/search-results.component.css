@@ -1,0 +1,7 @@
+.custom-list-item {
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-list-item:hover {
+    background-color: #e0e0e09c; /* Light gray background color on hover */
+  }

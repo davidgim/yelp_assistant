@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchFormComponent } from './search-form.component';
+import { MatToolbar } from '@angular/material/toolbar';
 
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
@@ -8,7 +9,7 @@ describe('SearchFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchFormComponent]
+      imports: [SearchFormComponent, MatToolbar]
     })
     .compileComponents();
 
