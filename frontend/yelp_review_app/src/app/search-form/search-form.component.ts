@@ -1,12 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { setThrowInvalidWriteToSignalError } from '@angular/core/primitives/signals';
-import axios from 'axios';
 import { filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { SearchResultsComponent } from '../search-results/search-results.component';
+import { MatToolbar } from '@angular/material/toolbar';
+import { ApiService } from '../api.service';
+
+interface Business {
+  business_id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-search-form',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatToolbar,
+    SearchResultsComponent],
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.css'
 })
@@ -23,89 +44,93 @@ export class SearchFormComponent implements OnInit {
   filteredCities = this.cities;
   filteredCategories = this.categories;
   filteredBusinesses = this.businesses;
+  showResults: boolean = false;
 
-  async ngOnInit() {
-      await this.fetchStates();
-      await this.fetchCategories();
-  }
+  private locationsDict: { [key: string]: string[] } = {};
 
-  async fetchStates() {
-    try {
-      const response = await axios.get('/api/states');
-      this.states = response.data;
-      this.filteredStates = this.states;
-    } catch (error) {
-      console.error('Error fetching states: ', error)
-    }
-  }
+  constructor(private apiService: ApiService) { }
 
-  async fetchCategories() {
-    try {
-      const response = await axios.get('/api/categories');
-      this.categories = response.data;
-      this.filteredCategories = this.categories;
-    } catch (error) {
-      console.error('Error fetching states: ', error);
-    }
-  }
-
-  async handleSearch() {
-    try {
-      const response = await axios.post('/api/search', {
-        city: this.city,
-        state: this.state,
-        category: this.category,
-        businessName: this.businessName
+    ngOnInit() {
+      this.apiService.getAllLocations().subscribe({
+        next: (data: { state: string, city: string}[]) => {
+          this.locationsDict = data.reduce((acc, { state, city }) => {
+            if (!acc[state]) acc[state] = [];
+            acc[state].push(city);
+            return acc;
+          }, {} as { [key: string]: string[] });
+          this.states = Object.keys(this.locationsDict);
+          this.filteredStates = this.states;
+        },
+        error: (error) => console.error('Error fetching locations ', error)
       });
-    } catch (error) {
-      console.error('Error fetching search results: ', error);
-    }
+      this.apiService.getStates().subscribe({
+        next: (data: string[]) => {
+          this.states = data;
+          this.filteredStates = data;
+        },
+        error: (error) => console.error('Error fetching states:', error)
+      });
+
+      this.apiService.getCategories().subscribe({
+        next: (data: string[]) => {
+          this.categories = data;
+          this.filteredCategories = data;
+        },
+        error: (error) => console.error('Error fetching states:', error)
+      })
   }
 
-  async filterStates() {
+  handleSearch() {
+    this.apiService.searchBusinesses(this.state, this.city, this.category, this.businessName).subscribe({
+      next: (data: Business[]) => {
+        this.filteredBusinesses = data;
+        this.showResults = true;
+      },
+      error: (error) => console.error('Error fetching search results:', error)
+    });
+  }
+
+  filterStates() {
+    if (this.showResults) {
+      this.showResults = false;
+    }
     const filterValue = this.state.toLowerCase();
     this.filteredStates = this.states.filter(option => option.toLowerCase().includes(filterValue));
     if (this.state) {
-      try {
-        const response = await axios.get('/api/cities', { params: { state: this.state } });
-        const cities = response.data;
-        const currentCityValid = cities.includes(this.city);
-
-        this.cities = cities;
-        this.filteredCities = this.cities;
-        if (!currentCityValid) {
-          this.city = '';
-        }
-        this.filteredBusinesses = [];
-      } catch (error) {
-        console.error('Error fetching cities: ', error)
-      }
-      await this.filterBusinesses();
+      this.onStateSelected()
     } else {
       this.filteredCities = [];
       this.filteredBusinesses = [];
     }
+
   }
 
-  async filterCities() {
+  onStateSelected() {
+    if (this.showResults) {
+      this.showResults = false;
+    }
+    this.cities = this.locationsDict[this.state] || [];
+    const currentCityValid = this.cities.includes(this.city);
+    this.filteredCities = this.cities;
+    if (!currentCityValid) {
+      this.city = '';
+    }
+    this.filteredBusinesses = [];
+  }
+
+  filterCities() {
+    if (this.showResults) {
+      this.showResults = false;
+    }
     const filterValue = this.city.toLowerCase();
     this.filteredCities = this.cities.filter(option => option.toLowerCase().includes(filterValue));
     if (this.city) {
-      try {
-        const response = await axios.get('/api/cities', { params: { state: this.state } });
-        const states = response.data;
-        const currentStateValid = states.includes(this.state);
-
-        this.filteredStates = this.states;
-
-        if (!currentStateValid) {
-          this.state = '';
-        }
-        this.filteredBusinesses = [];
-      } catch (error) {
-        console.error('Error fetching states: ', error)
+      const states = Object.keys(this.locationsDict).filter(state => this.locationsDict[state].includes(this.city));
+      const currentStateValid = this.states.includes(this.state);
+      if (!currentStateValid) {
+        this.state = '';
       }
-      await this.filterBusinesses();
+      this.filteredBusinesses = [];
     } else {
       this.filteredStates = this.states;
       this.filteredBusinesses = [];
@@ -113,24 +138,34 @@ export class SearchFormComponent implements OnInit {
   }
 
   filterCategories() {
+    if (this.showResults) {
+      this.showResults = false;
+    }
     const filterValue = this.category.toLowerCase();
     this.filteredCategories = this.categories.filter(option => option.toLowerCase().includes(filterValue));
+    this.onCategorySelected();
+  }
+
+  onCategorySelected() {
     if (this.category) {
       this.filterBusinesses();
     }
   }
 
-  async filterBusinesses() {
-    try {
-      const response = await axios.get('/api/businesses', { params: { state: this.state, city: this.city, categories: this.categories } });
-      this.businesses = response.data;
-      this.filteredBusinesses = this.businesses;
-    } catch (error) {
-      console.error('Error fetching businesses: ', error)
-    }
+  filterBusinesses() {
+    this.apiService.searchBusinesses(this.state, this.city, this.category, '').subscribe({
+      next: (data: Business[]) => {
+        this.businesses = data;
+        this.filteredBusinesses = data;
+      },
+      error: (error) => console.error('Error fetching businesses:', error)
+    });
   }
 
   filterBusinessNames() {
+    if (this.showResults) {
+      this.showResults = false;
+    }
     const filterValue = this.businessName.toLowerCase();
     this.filteredBusinesses = this.businesses.filter(business => business.name.toLowerCase().includes(filterValue))
   }
