@@ -3,10 +3,6 @@
 __pycache__/
 *.pyc
 
-<<<<<<< HEAD
 app/config.py
 
 *.log
-=======
-app/config.py
->>>>>>> e268100 (Added gitignore for backend and updated it again)

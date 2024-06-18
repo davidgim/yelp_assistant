@@ -10,10 +10,12 @@ import { CommonModule } from '@angular/common';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { MatToolbar } from '@angular/material/toolbar';
 import { ApiService } from '../api.service';
+import {MatIconModule} from '@angular/material/icon';
 
 interface Business {
   business_id: string;
   name: string;
+  address: string;
 }
 
 @Component({
@@ -27,6 +29,7 @@ interface Business {
     MatAutocompleteModule,
     MatButtonModule,
     MatToolbar,
+    MatIconModule,
     SearchResultsComponent],
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.css'
@@ -39,7 +42,7 @@ export class SearchFormComponent implements OnInit {
   states: string[] = [];
   cities: string[] = [];
   categories: string[] = [];
-  businesses: { business_id: string, name: string }[]= [];
+  businesses: { business_id: string, name: string, address: string }[]= [];
   filteredStates = this.states;
   filteredCities = this.cities;
   filteredCategories = this.categories;

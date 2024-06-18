@@ -1,7 +1,6 @@
-<mat-toolbar color="primary">Yelping Hand</mat-toolbar>
-<div class="container">
-    <form (ngSubmit)="handleSearch()">
-        <mat-form-field class="example-full-width">
+<div class="search-form-container">
+    <form class="search-form" (ngSubmit)="handleSearch()">
+        <mat-form-field appearance = "outline" class="example-full-width">
             <mat-label>State</mat-label>
             <input type="text" matInput [matAutocomplete]="autoState" [(ngModel)]="state" name="state" (input)="filterStates()">
             <mat-autocomplete #autoState="matAutocomplete" (optionSelected)="onStateSelected()">
@@ -11,7 +10,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field appearance = "outline" class="example-full-width">
             <mat-label>City</mat-label>
             <input type="text" matInput [matAutocomplete]="autoCity" [(ngModel)]="city" name="city" (input)="filterCities()">
             <mat-autocomplete #autoCity="matAutocomplete">
@@ -21,7 +20,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field appearance = "outline" class="example-full-width">
             <mat-label>Category</mat-label>
             <input type="text" matInput [matAutocomplete]="autoCategory" [(ngModel)]="category" name="category" (input)="filterCategories()">
             <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected()">
@@ -31,7 +30,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field appearance = "outline" class="example-full-width">
             <mat-label>Business Name</mat-label>
             <input type="text" matInput [matAutocomplete]="autoBusiness" [(ngModel)]="businessName" name="businessName" (input)="filterBusinessNames()">
             <mat-autocomplete #autoBusiness="matAutocomplete">
@@ -39,12 +38,11 @@
                     {{ option.name }}
                 </mat-option>
             </mat-autocomplete>
+            <button matSuffix mat-button  type="submit" class="search-button"><mat-icon >search</mat-icon></button>
         </mat-form-field>
-
-        <button mat-raised-button color="primary" type="submit">Search</button>
     </form>
-
-    <ng-container *ngIf="showResults">
-        <app-search-results [businesses]="filteredBusinesses"></app-search-results>
-      </ng-container>
 </div>
+
+<ng-container *ngIf="showResults">
+    <app-search-results [businesses]="filteredBusinesses"></app-search-results>
+</ng-container>

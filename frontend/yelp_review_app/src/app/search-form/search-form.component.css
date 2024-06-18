@@ -11,13 +11,17 @@
 .mat-form-field {
   width: 100%;
   margin-bottom: 20px;
+  margin-inline: 20px;
+  margin-right: 20px;
+  width: auto;
 }
+
 
 button {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #1976d2;
+  background-color: #d21919;
   color: white;
   border: none;
   border-radius: 5px;
@@ -26,10 +30,47 @@ button {
 }
 
 button:hover {
-  background-color: #155a9a;
+  background-color: #f42a2a;
 }
 
 .mat-toolbar {
   background-color: #1976d2;
   color: white;
+}
+
+.search-form-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 1200px;
+  align-items: center;
+}
+
+
+.mat-icon {
+  color: white;
+  transform: scale(2);
+}
+
+.search-button {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  background-color: #d32323;
+  color: white;
+  margin: 0;
+  height: 56px;
+  width: 16px;
+  padding: 0 16px; 
+  border-radius: 4px;
+  line-height: 1.75; 
 }
