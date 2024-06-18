@@ -1,6 +1,7 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BusinessSummaryDialogComponent } from '../business-summary-dialog/business-summary-dialog.component';
 import { ApiService } from '../api.service';
@@ -8,7 +9,8 @@ import { ApiService } from '../api.service';
 
 interface Business {
   business_id: string,
-  name: string
+  name: string,
+  address: string
 }
 
 @Component({
@@ -18,7 +20,8 @@ interface Business {
   imports: [
     CommonModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.css'
@@ -27,23 +30,35 @@ export class SearchResultsComponent {
   @Input() businesses: Business[] = [];
   selectedBusiness: any;
   summary = '';
+  loading = false;
   
   constructor(private dialog: MatDialog, private apiService: ApiService) {};
   selectBusiness(business: any) {
+    this.loading = true;
     this.selectedBusiness = business;
     this.apiService.summarizeBusiness(business.business_id).subscribe({
-      next: (data: string) => {
-        this.summary = data;
+      next: (data: any) => {
+        this.summary = data.summary;
+        this.loading = false;
+        this.openDialog(business.name, this.summary);
       },
       error: (error) => console.error('Error fetching summary:', error)
     });
-    this.openDialog(business.name, this.summary);
   }
 
   openDialog(name: string, summary: string): void {
-    this.dialog.open(BusinessSummaryDialogComponent, {
+    const dialogRef = this.dialog.open(BusinessSummaryDialogComponent, {
       data: { name, summary }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.resetState();
+    })
+  }
+
+  resetState() {
+    this.summary = '';
+    this.selectedBusiness = null;
   }
 }
 

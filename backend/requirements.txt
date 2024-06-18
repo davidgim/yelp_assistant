@@ -1,8 +1,10 @@
 flask
 flask-restful
 flask-sqlalchemy
+flask-jwt-extended
 psycopg2-binary
 requests
 python-dotenv
 openai
 flask-cors
+groq

@@ -1,7 +1,48 @@
 .custom-list-item {
     transition: background-color 0.3s ease;
-  }
+}
   
-  .custom-list-item:hover {
-    background-color: #e0e0e09c; /* Light gray background color on hover */
-  }
+.custom-list-item:hover {
+    background-color: #e0e0e09c; 
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 2400px;
+    align-items: center;
+    position: relative;
+    left: -50px;
+}
+  
+.custom-list-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+  
+.business-info {
+    display: flex;
+    flex-direction: column;
+}
+  
+.business-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+  
+.business-address {
+    color: gray;
+    font-size: 0.9em;
+}
+  

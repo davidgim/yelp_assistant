@@ -1,10 +1,14 @@
 import os
 from openai import OpenAI
+from groq import Groq
 from flask_restful import Resource, reqparse
 from .models import Business, Review, Location
 import re
 
-client = OpenAI()
+#client = OpenAI()
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"),
+)
 
 def initialize_routes(api):
     api.add_resource(SearchApi, '/api/search')
@@ -46,7 +50,7 @@ class SummarizeApi(Resource):
         if not business:
             return {'message': 'Business not found'}, 404
         
-        reviews = Review.query.filter_by(business_id = args['businessId']).order_by(Review.useful.desc()).limit(2).all()
+        reviews = Review.query.filter_by(business_id = args['businessId']).order_by(Review.useful.desc()).limit(5).all()
         if not reviews:
             return {'message': 'No reviews found for this business'}, 404
         
@@ -92,11 +96,10 @@ def clean_text(text):
 
 def get_summary(business, reviews):
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        response_format={ "type": "json_object" },
+        model="llama3-8b-8192",
+        temperature=0.5,
         messages=[
-            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
-            {"role": "user", "content": f"Provide a concise and readable summary that highlights the most important or repeated aspects of the following reviews for {business.name}: {reviews}"}
+            {"role": "user", "content": f"Provide a concise and readable summary that highlights the most important or repeated aspects of the following reviews for {business.name}: {reviews}. Give only the summary, no other dialogue. Do not give bullet points, assume it is going to be read as a paragraph in a pop-up dialogue. Do not say anything along the lines of: here is a ___ just go straight to the point. If it is a food-related place list the most-liked items."}
         ]
     )
     summary = response.choices[0].message.content
