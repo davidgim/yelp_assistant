@@ -28,11 +28,11 @@
     <a routerLink="/" class="nav-link">
         <fa-icon [icon]="faHouse" class="mr-1"></fa-icon>
     </a>
-    <a routerLink="/profile" class="nav-link" *ngIf="auth.isAuthenticated$ | async">
+    <a routerLink="/profile" class="nav-link" *ngIf="this.auth.isAuthenticated$ | async">
         <fa-icon [icon]="faUser" class="mr-1"></fa-icon> Profile
     </a>
-    <button id="qsLoginBtn" class="btn btn-primary nav-link" *ngIf="(auth.isAuthenticated$ | async) === false" (click)="loginWithRedirect()">Log in</button>
+    <button id="qsLoginBtn" class="btn btn-primary nav-link" *ngIf="(isAuth0Authenticated$ | async) === false" (click)="loginWithRedirect()">Log in</button>
     <button id="qsLogoutBtn" class="btn btn-link nav-link" *ngIf="auth.isAuthenticated$ | async" (click)="logout()">
-        <fa-icon [icon]="faRightFromBracket" class="mr-1"></fa-icon>
+        <fa-icon [icon]="faRightFromBracket" class="mr-1"></fa-icon>Logout
     </button>
 </nav>
