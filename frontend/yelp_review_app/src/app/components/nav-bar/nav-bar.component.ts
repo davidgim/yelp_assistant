@@ -1,8 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { faUser, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faPowerOff, faHouse, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+  NgbCollapse,
+  NgbDropdown,
+  NgbDropdownMenu,
+  NgbDropdownToggle,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { Router, RouterLink } from '@angular/router';
 
@@ -12,8 +18,12 @@ import { Router, RouterLink } from '@angular/router';
   imports: [
     FontAwesomeModule,
     AsyncPipe,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    NgbDropdown,
+    NgbCollapse,
     NgIf,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
@@ -21,14 +31,16 @@ import { Router, RouterLink } from '@angular/router';
 export class NavBarComponent {
   isCollapsed = true;
   faUser = faUser;
-  faPowerOff = faPowerOff
+  faPowerOff = faPowerOff;
+  faHouse = faHouse;
+  faRightFromBracket = faRightFromBracket;
 
   constructor(
     public auth: AuthService,
     @Inject(DOCUMENT) private doc: Document
   ) {}
 
-  loginWithReidrect() {
+  loginWithRedirect() {
     this.auth.loginWithRedirect();
   }
 
