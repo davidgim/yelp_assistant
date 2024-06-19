@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { MatToolbar } from '@angular/material/toolbar';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 import {MatIconModule} from '@angular/material/icon';
 
 interface Business {

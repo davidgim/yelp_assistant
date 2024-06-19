@@ -9,9 +9,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { provideAuth0 } from '@auth0/auth0-angular';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
+const domain = 'dev-crwti8zu1cnqknlp.us.auth0.com';
+const clientId = 'QRPObLEZnBMRaCXoJchOTd1wSQVRXnmz';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +23,13 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideAnimationsAsync(),
     provideHttpClient(),
+    provideAuth0({
+      domain: domain,
+      clientId: clientId,
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    }),
     importProvidersFrom(
       FormsModule,
       MatToolbarModule,

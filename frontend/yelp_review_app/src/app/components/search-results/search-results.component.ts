@@ -4,7 +4,7 @@ import { MatListModule } from '@angular/material/list'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BusinessSummaryDialogComponent } from '../business-summary-dialog/business-summary-dialog.component';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 
 
 interface Business {
