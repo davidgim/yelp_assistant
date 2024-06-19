@@ -35,6 +35,8 @@ export class NavBarComponent {
   faHouse = faHouse;
   faRightFromBracket = faRightFromBracket;
 
+  isAuth0Authenticated$ = this.auth.isAuthenticated$;
+
   constructor(
     public auth: AuthService,
     @Inject(DOCUMENT) private doc: Document
@@ -42,6 +44,8 @@ export class NavBarComponent {
 
   loginWithRedirect() {
     this.auth.loginWithRedirect();
+
+    console.log(this.auth.isAuthenticated$);
   }
 
   logout() {
