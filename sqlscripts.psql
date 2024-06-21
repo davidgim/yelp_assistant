@@ -35,3 +35,17 @@ CREATE TABLE tips (
     business_id VARCHAR(22) REFERENCES businesses(business_id),
     user_id VARCHAR(22)
 );
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(22) UNIQUE NOT NULL,
+    password VARCHAR(22) NOT NULL,
+    dietary_restrictions TEXT[],
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_favorites (
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    business_id VARCHAR(22) REFERENCES businesses(business_id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, business_id)
+);

@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app)
     api = Api(app)
 
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 
     from .routes import initialize_routes
     initialize_routes(api)
