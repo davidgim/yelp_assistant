@@ -6,12 +6,12 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5000/api';
+  private baseUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient) { }
 
   getAllLocations(): Observable<{ state: string, city: string }[]> { 
-    return this.http.get<any>(`${this.baseUrl}/locations`);
+    return this.http.get<any>(`${this.baseUrl}/location/locations`);
   }
 
   searchBusinesses(state: string, city: string, category: string, businessName: string): Observable<any> {
@@ -20,24 +20,37 @@ export class ApiService {
     if (city) params = params.set('city', city);
     if (category) params = params.set('category', category);
     if (businessName) params = params.set('businessName', businessName);
-    return this.http.get(`${this.baseUrl}/search`, { params });
+    return this.http.get(`${this.baseUrl}/business/search`, { params });
   }
 
-  summarizeBusiness(businessId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/summarize`, { businessId });
+  summarizeBusiness(businessId: string, userId?: string): Observable<any> {
+    const body = userId ? { businessId, userId } : { businessId }
+    return this.http.post(`${this.baseUrl}/business/summarize`, body);
   }
 
   getStates(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/states`);
+    return this.http.get<string[]>(`${this.baseUrl}/location/states`);
   }
 
   getCities(state: string): Observable<string[]> {
     let params = new HttpParams;
     if (state) params = params.set('state', state);
-    return this.http.get<string[]>(`${this.baseUrl}/cities`, { params });
+    return this.http.get<string[]>(`${this.baseUrl}/location/cities`, { params });
   }
 
   getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/categories`);
+    return this.http.get<string[]>(`${this.baseUrl}/business/categories`);
+  }
+
+  getUserMetadata(userId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/user/metadata`, { params: { user_id: userId } });
+  }
+
+  updateUserMetadata(userId: string, metadata: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/metadata`, { user_id: userId, ...metadata });
+  }
+
+  updateFavoriteBusiness(userId: string, newFavorite: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/metadata/businesses`, { user_id: userId, new_favorite: newFavorite})
   }
 }

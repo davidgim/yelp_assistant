@@ -1,1 +1,6 @@
-<p>profile works!</p>
+<ul *ngIf="auth.user$ | async as user">
+    <li>{{ user.nickname }}</li>
+    <li>{{ user.email }}</li>
+    <li *ngIf="favoriteBusinesses.length">Favorite Businesses: {{ favoriteBusinesses | json }}</li>
+    <li *ngIf="dietaryRestrictions.length">Dietary Restrictions: {{ dietaryRestrictions | json }}</li>
+</ul>

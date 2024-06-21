@@ -70,3 +70,4 @@ class Location(db.Model):
             'state': self.state,
             'city': self.city
         }
+    
