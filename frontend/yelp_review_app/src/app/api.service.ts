@@ -51,6 +51,18 @@ export class ApiService {
   }
 
   updateFavoriteBusiness(userId: string, newFavorite: any): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/user/metadata/businesses`, { user_id: userId, new_favorite: newFavorite})
+    return this.http.patch(`${this.baseUrl}/user/metadata/businesses/add`, { user_id: userId, new_favorite: newFavorite});
+  }
+
+  deleteFavoriteBusiness(userId: string, toDelete: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/metadata/businesses/delete`, { user_id: userId, to_delete: toDelete});
+  }
+
+  addDietaryRestriction(userId: string, newRestriction: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/metadata/diet/add`, {user_id: userId, new_restriction: newRestriction});
+  }
+
+  deleteDietaryRestriction(userId: string, toDelete: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/metadata/diet/delete`, {user_id: userId, to_delete: toDelete});
   }
 }
