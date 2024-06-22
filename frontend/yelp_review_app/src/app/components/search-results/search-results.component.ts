@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe, NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -44,7 +44,7 @@ export class SearchResultsComponent {
         next: (data: any) => {
           this.summary = data.summary;
           this.loading = false;
-          this.openDialog(business.name, this.summary);
+          this.openDialog(business.name, business.business_id, this.summary);
         },
         error: (error) => console.error('Error fetching summary:', error)
       });
@@ -52,9 +52,30 @@ export class SearchResultsComponent {
     
   }
 
-  openDialog(name: string, summary: string): void {
+  addToFavorites(business: any) {
+    this.auth.user$.subscribe((user) => {
+      if (user) {
+        const userId = user.sub as string;
+        const newFavorite = {
+          name: business.name,
+          id: business.business_id
+        };
+
+        this.apiService.updateFavoriteBusiness(userId, newFavorite).subscribe({
+          next: (data: any) => {
+          console.log('Updated favorites', data)
+          },
+          error: (error) => console.error('Error updating favorites', error)
+        });
+      } else {
+        console.error('User not logged in')
+      }
+    });
+  }
+    
+  openDialog(name: string, businessId: string, summary: string): void {
     const dialogRef = this.dialog.open(BusinessSummaryDialogComponent, {
-      data: { name, summary }
+      data: { name, businessId, summary }
     });
 
     dialogRef.afterClosed().subscribe(result => {

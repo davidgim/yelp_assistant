@@ -1,13 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule } from '@angular/core';
 import { AsyncPipe, NgIf, CommonModule, JsonPipe } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { ApiService } from '../../api.service';
 import { environment } from '../../../environments/environment';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+
+interface Business {
+  name: string;
+  business_id: string;
+}
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [AsyncPipe, NgIf, JsonPipe, CommonModule],
+  imports: [
+    AsyncPipe, 
+    NgIf, 
+    JsonPipe,
+    CommonModule, 
+    MatListModule, 
+    MatIconModule, 
+    MatFormFieldModule, 
+    FormsModule, 
+    MatInputModule
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -18,6 +38,7 @@ export class ProfileComponent implements OnInit{
   userId: string = '';
   favoriteBusinesses: any[] = [];
   dietaryRestrictions: string[] = [];
+  newDietaryRestriction: string = '';
   constructor(private apiService: ApiService, public auth: AuthService) {}
 
   ngOnInit(): void {
@@ -36,6 +57,8 @@ export class ProfileComponent implements OnInit{
   loadUserMetadata(): void {
     this.apiService.getUserMetadata(this.userId).subscribe({
       next: (metadata) => {
+        // const preMappedBusinesses = metadata.favorite_businesses || [];
+        // this.favoriteBusinesses = preMappedBusinesses.map((business: Business) => business.name);
         this.favoriteBusinesses = metadata.favorite_businesses || [];
         this.dietaryRestrictions = metadata.dietary_restrictions || [];
       },
@@ -63,4 +86,39 @@ export class ProfileComponent implements OnInit{
       }
     });
   }
+
+  deleteFavoriteBusiness(business: Business) {
+    this.apiService.deleteFavoriteBusiness(this.userId, business).subscribe({
+      next: (respones) => {
+        this.loadUserMetadata();
+      },
+      error: (error) => {
+        console.error('Failed to delete business:', error);
+      }
+    })
+  }
+
+  addDietaryRestriction(dietaryRestriction: string): void {
+    this.apiService.addDietaryRestriction(this.userId, dietaryRestriction).subscribe({
+      next: (response) => {
+        this.loadUserMetadata();
+      },
+      error: (error) => {
+        console.error('Failed to add user dietary restriction:', error);
+      }
+    });
+  }
+
+  deleteDietaryRestriction(dietaryRestriction: string): void {
+    this.apiService.deleteDietaryRestriction(this.userId, dietaryRestriction).subscribe({
+      next: (response) => {
+        this.loadUserMetadata();
+      },
+      error: (error) => {
+        console.error('Failed to delete user dietary restriction:', error);
+      }
+    });
+  }
+
+  
 }

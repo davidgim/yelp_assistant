@@ -7,20 +7,24 @@ import json
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
+testing_with_api = False
+
 def clean_text(text):
     return re.sub(r'\s+', ' ', text).strip()
 
 def get_summary(business, reviews, dietary_restrictions=None):
     print(dietary_restrictions)
-    user_prompt = f"Look for information regarding these dietary restrictions: {dietary_restrictions}. " if dietary_restrictions else ""
-    response = client.chat.completions.create(
-        model="llama3-8b-8192",
-        temperature=0.5,
-        messages=[
-            {"role": "user", "content": f"{user_prompt} Provide a concise and readable summary that highlights the most important or repeated aspects of the following reviews for {business.name}: {reviews}. Give only the summary, no other dialogue. Paragraph no bullets. Do not say anything: here is a ___ just go straight to the point. If it is a food-related place list the most-liked items. Speficially mention the dietary restrictions provided."}
-        ]
-    )
-    summary = response.choices[0].message.content
+    summary = "Testing without api currently"
+    if testing_with_api:
+        user_prompt = f"Look for information regarding these dietary restrictions: {dietary_restrictions}. " if dietary_restrictions else ""
+        response = client.chat.completions.create(
+            model="llama3-8b-8192",
+            temperature=0.5,
+            messages=[
+                {"role": "user", "content": f"{user_prompt} Provide a concise and readable summary that highlights the most important or repeated aspects of the following reviews for {business.name}: {reviews}. Give only the summary, no other dialogue. Paragraph no bullets. Do not say anything: here is a ___ just go straight to the point. If it is a food-related place list the most-liked items. Speficially mention the dietary restrictions provided."}
+            ]
+        )
+        summary = response.choices[0].message.content
     return summary
 
 

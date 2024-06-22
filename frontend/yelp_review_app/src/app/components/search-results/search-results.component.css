@@ -25,10 +25,12 @@
   
 .custom-list-item {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 8px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
+    position: relative;
+    height: fit-content;
 }
   
 .business-info {
@@ -45,4 +47,23 @@
     color: gray;
     font-size: 0.9em;
 }
+
+.results-container {
+    padding: 20px;
+  }
   
+button {
+    background-color: #d21919;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    padding: 5px 10px;
+    height: fit-content; 
+    margin-left: 10px;
+  }
+  
+ button:hover {
+    background-color: #f42a2a;
+  }
