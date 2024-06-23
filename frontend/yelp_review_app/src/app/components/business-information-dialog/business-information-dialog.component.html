@@ -1,8 +1,10 @@
 <h1 mat-dialog-title>{{ data.name }}</h1>
 <div mat-dialog-content>
-  <p>{{ data.summary }}</p>
+  <p>
+    {{ data.address }}
+    {{ data.city }} {{ data.state }}
+  </p>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>
-  <button [disabled]="isDisabled" mat-button (click)="addToFavorites(data.name, data.businessId)">{{ favoritesText }}</button>
 </div>

@@ -22,6 +22,9 @@ interface Business {
 })
 export class BusinessSummaryDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: { name: string, businessId: string, summary: string }, public auth: AuthService, private apiService: ApiService) {}
+
+  favoritesText = 'Add To Favorites';
+  isDisabled = false;
   
   addToFavorites(businessName: string, businessId: string) {
     this.auth.user$.subscribe((user) => {
@@ -34,7 +37,9 @@ export class BusinessSummaryDialogComponent {
 
         this.apiService.updateFavoriteBusiness(userId, newFavorite).subscribe({
           next: (data: any) => {
-          console.log('Updated favorites', data)
+            console.log('Updated favorites', data);
+            this.favoritesText = 'Added To Favorites!'
+            this.isDisabled = true
           },
           error: (error) => console.error('Error updating favorites', error)
         });
