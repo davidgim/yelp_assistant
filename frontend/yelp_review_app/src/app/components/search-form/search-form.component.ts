@@ -16,6 +16,8 @@ interface Business {
   business_id: string;
   name: string;
   address: string;
+  city: string;
+  state: string;
 }
 
 @Component({
@@ -42,7 +44,7 @@ export class SearchFormComponent implements OnInit {
   states: string[] = [];
   cities: string[] = [];
   categories: string[] = [];
-  businesses: { business_id: string, name: string, address: string }[]= [];
+  businesses: { business_id: string, name: string, address: string, city: string, state: string }[]= [];
   filteredStates = this.states;
   filteredCities = this.cities;
   filteredCategories = this.categories;

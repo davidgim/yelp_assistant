@@ -11,7 +11,9 @@ import { AuthService } from '@auth0/auth0-angular';
 interface Business {
   business_id: string,
   name: string,
-  address: string
+  address: string,
+  city: string,
+  state: string
 }
 
 @Component({
