@@ -5,13 +5,22 @@ import { ApiService } from '../../api.service';
 import { environment } from '../../../environments/environment';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule, matDialogAnimations } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { BusinessInformationDialogComponent } from '../../components/business-information-dialog/business-information-dialog.component';
 
 interface Business {
   name: string;
-  business_id: string;
+  businessId: string;
+}
+
+interface SelectedBusiness {
+  name: string,
+  address: string,
+  city: string,
+  state: string
 }
 
 @Component({
@@ -26,7 +35,8 @@ interface Business {
     MatIconModule, 
     MatFormFieldModule, 
     FormsModule, 
-    MatInputModule
+    MatInputModule,
+    MatDialogModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -39,7 +49,8 @@ export class ProfileComponent implements OnInit{
   favoriteBusinesses: any[] = [];
   dietaryRestrictions: string[] = [];
   newDietaryRestriction: string = '';
-  constructor(private apiService: ApiService, public auth: AuthService) {}
+  selectedBusiness: SelectedBusiness = {name: '', address: '', city: '', state: ''};
+  constructor(private apiService: ApiService, public auth: AuthService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.auth.user$.subscribe(user => {
@@ -102,6 +113,7 @@ export class ProfileComponent implements OnInit{
     this.apiService.addDietaryRestriction(this.userId, dietaryRestriction).subscribe({
       next: (response) => {
         this.loadUserMetadata();
+        this.newDietaryRestriction = '';
       },
       error: (error) => {
         console.error('Failed to add user dietary restriction:', error);
@@ -120,5 +132,30 @@ export class ProfileComponent implements OnInit{
     });
   }
 
-  
+  getBusinessInformation(businessId: string) {
+    this.apiService.getBusinessInformation(businessId).subscribe({
+      next: (data) => {
+        this.selectedBusiness = data;
+        this.openDialog(this.selectedBusiness.name, this.selectedBusiness.address, this.selectedBusiness.city, this.selectedBusiness.state);
+      },
+      error: (error) => {
+        console.error('Failed to retrieve business information', error);
+      }
+    })
+  }
+
+  openDialog(name: string, address: string, city: string, state: string): void {
+    const dialogRef = this.dialog.open(BusinessInformationDialogComponent, {
+      data: { name, address, city, state }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.selectedBusiness = {
+        name: '',
+        address: '',
+        city: '',
+        state: ''
+      };
+    })
+  }
 }

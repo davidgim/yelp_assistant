@@ -1,32 +1,38 @@
-<ul *ngIf="auth.user$ | async as user">
-    <li>Username: {{ user.nickname }}</li>
-    <li>email: {{ user.email }}</li>
-    <li *ngIf="favoriteBusinesses.length">Favorite Businesses: {{ favoriteBusinesses | json }}</li>
-    <li *ngIf="dietaryRestrictions.length">Dietary Restrictions: {{ dietaryRestrictions | json }}</li>
+<div *ngIf="auth.user$ | async as user">
+    <h3>Username: {{ user.nickname }}</h3>
+    <h3>email: {{ user.email }}</h3>
 
-    <form class="new-restriction-form" (ngSubmit)="addDietaryRestriction(newDietaryRestriction)">
-        <mat-form-field class="example-full-width">
-            <mat-label>Add dietary restriction</mat-label>
-            <input matInput type="text" [(ngModel)]="newDietaryRestriction" name="newDietaryRestriction" placeholder="Ex. Dairy, Vegan">
-        </mat-form-field>
-        <button matSuffix mat-button  type="submit" class="search-button"><mat-icon >add</mat-icon></button>
-    </form>
+    <div>
+        <h3>Dietary Restrictions</h3>
+        <form class="new-restriction-form" (ngSubmit)="addDietaryRestriction(newDietaryRestriction)">
+            <mat-form-field class="example-full-width">
+                <mat-label>Add dietary restriction</mat-label>
+                <input matInput type="text" [(ngModel)]="newDietaryRestriction" name="newDietaryRestriction" placeholder="Ex. Dairy, Vegan">
+            </mat-form-field>
+            <button matSuffix mat-button  type="submit" class="search-button"><mat-icon >add</mat-icon></button>
+        </form>
 
-    <mat-list>
-        <mat-list-item *ngFor="let business of favoriteBusinesses" class="custom-list-item">
-            <div class="business-list-item">
-                {{ business.name }}
-                <mat-icon class="close-icon" (click)="deleteFavoriteBusiness(business)">close</mat-icon>
-            </div>
-        </mat-list-item>
-    </mat-list>
+        <mat-list>
+            <mat-list-item *ngFor="let restriction of dietaryRestrictions" class="custom-list-item">
+                <div class="restriction-list-item">
+                    {{ restriction }}
+                    <mat-icon class="close-icon" (click)="deleteDietaryRestriction(restriction)">close</mat-icon>
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </div>  
 
-    <mat-list>
-        <mat-list-item *ngFor="let restriction of dietaryRestrictions" class="custom-list-item">
-            <div class="restriction-list-item">
-                {{ restriction }}
-                <mat-icon class="close-icon" (click)="deleteDietaryRestriction(restriction)">close</mat-icon>
-            </div>
-        </mat-list-item>
-    </mat-list>
-</ul>
+    <div>
+        <h3>Saved Businesses</h3>
+        <mat-list>
+            <mat-list-item *ngFor="let business of favoriteBusinesses" (click)="getBusinessInformation(business.id)" class="custom-list-item">
+                <div class="business-list-item">
+                    {{ business.name }}
+                    <mat-icon class="close-icon" (click)="deleteFavoriteBusiness(business); $event.stopPropagation()">close</mat-icon>
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </div>
+
+
+</div>

@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from app.models import Business, Review
+from flask import request
 import re
 from app.utils import clean_text, get_summary, get_management_api_token, get_user_metadata
 
@@ -62,3 +63,16 @@ class BusinessCategories(Resource):
             if category_list[0]:
                 unique_categories.update(category_list[0])
         return list(unique_categories)
+
+class BusinessInformation(Resource):
+    def get(self):
+        business_id = request.args.get('business_id')
+
+        if not business_id:
+            return {'message': 'Business ID is required'}, 400
+
+        business = Business.query.get(business_id)
+
+        serialized_business = business.serialize()
+
+        return serialized_business
