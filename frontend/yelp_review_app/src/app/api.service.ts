@@ -23,6 +23,12 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/business/search`, { params });
   }
 
+  getBusinessInformation(businessId: string): Observable<any> {
+    let params = new HttpParams;
+    if (businessId) params = params.set('business_id', businessId);
+    return this.http.get(`${this,this.baseUrl}/business/search/information`, { params });
+  }
+
   summarizeBusiness(businessId: string, userId?: string): Observable<any> {
     const body = userId ? { businessId, userId } : { businessId }
     return this.http.post(`${this.baseUrl}/business/summarize`, body);
