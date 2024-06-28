@@ -1,1 +1,29 @@
-<app-search-form></app-search-form>
+<div class="search-page">
+    <div *ngIf="!showResults" class="placeholder-container">
+        <div class="background-image"></div>
+        <div class="content">
+            <!-- <img src="assets/logo.png" alt="Yelper Logo" class="logo-image"> -->
+            <h2>Welcome to Yelper!</h2>
+            <p>Discover the best local businesses and get concise summaries of their reviews.</p>
+            <p>Search for a Yelp business, gather reviews, and get a summarized overview tailored to your dietary restrictions.</p>
+            <p>Create an account to save your favorite businesses and customize your profile with dietary restrictions that will be factored into the reviews.</p>
+            <h3>How to Use:</h3>
+            <ul>
+                <li>Use the search bar above to find businesses in your area.</li>
+                <li>Click on a business to view a summarized review.</li>
+                <li>Create an account to save favorite businesses and add dietary restrictions.</li>
+            </ul>
+            <!-- <h3>Popular Searches</h3>
+            <div class="popular-searches">
+                <button mat-raised-button color="primary" (click)="performSearch('Restaurant')">Restaurants</button>
+                <button mat-raised-button color="primary" (click)="performSearch('Cafe')">Cafes</button>
+                <button mat-raised-button color="primary" (click)="performSearch('Gym')">Gyms</button> -->
+                <!-- Add more popular searches as needed -->
+            <!-- </div> -->
+        </div>
+    </div>
+    <div *ngIf="showResults">
+        <app-search-results></app-search-results>
+    </div>
+</div>
+<!-- <app-search-results></app-search-results> -->

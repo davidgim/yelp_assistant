@@ -13,14 +13,20 @@
     height: 100vh; 
 }
 
+.results-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .results-list {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 2400px;
-    align-items: center;
-    position: relative;
-    left: -50px;
+    max-width: 1200px; /* Set a maximum width for the results list */
+    align-items: stretch;
 }
   
 .custom-list-item {
@@ -47,23 +53,7 @@
     color: gray;
     font-size: 0.9em;
 }
-
-.results-container {
-    padding: 20px;
-  }
   
-button {
-    background-color: #d21919;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border: none;
-    padding: 5px 10px;
-    height: fit-content; 
-    margin-left: 10px;
-  }
-  
- button:hover {
+button:hover {
     background-color: #f42a2a;
-  }
+}

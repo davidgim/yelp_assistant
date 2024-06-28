@@ -1,6 +1,6 @@
 <div class="search-form-container">
     <form class="search-form" (ngSubmit)="handleSearch()">
-        <mat-form-field appearance = "outline" class="example-full-width">
+        <mat-form-field class="search-form-field">
             <mat-label>State</mat-label>
             <input type="text" matInput [matAutocomplete]="autoState" [(ngModel)]="state" name="state" (input)="filterStates()">
             <mat-autocomplete #autoState="matAutocomplete" (optionSelected)="onStateSelected()">
@@ -10,7 +10,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field appearance = "outline" class="example-full-width">
+        <mat-form-field class="search-form-field">
             <mat-label>City</mat-label>
             <input type="text" matInput [matAutocomplete]="autoCity" [(ngModel)]="city" name="city" (input)="filterCities()">
             <mat-autocomplete #autoCity="matAutocomplete">
@@ -20,7 +20,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field appearance = "outline" class="example-full-width">
+        <mat-form-field class="search-form-field">
             <mat-label>Category</mat-label>
             <input type="text" matInput [matAutocomplete]="autoCategory" [(ngModel)]="category" name="category" (input)="filterCategories()">
             <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected()">
@@ -30,7 +30,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field appearance = "outline" class="example-full-width">
+        <mat-form-field class="search-form-field">
             <mat-label>Business Name</mat-label>
             <input type="text" matInput [matAutocomplete]="autoBusiness" [(ngModel)]="businessName" name="businessName" (input)="filterBusinessNames()">
             <mat-autocomplete #autoBusiness="matAutocomplete">
@@ -42,7 +42,3 @@
         </mat-form-field>
     </form>
 </div>
-
-<ng-container *ngIf="showResults">
-    <app-search-results [businesses]="filteredBusinesses"></app-search-results>
-</ng-container>

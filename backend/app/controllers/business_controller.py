@@ -74,5 +74,4 @@ class BusinessInformation(Resource):
         business = Business.query.get(business_id)
 
         serialized_business = business.serialize()
-
         return serialized_business
