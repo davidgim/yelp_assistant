@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
 import { CommonModule, AsyncPipe, NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
@@ -6,7 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BusinessSummaryDialogComponent } from '../business-summary-dialog/business-summary-dialog.component';
 import { ApiService } from '../../api.service';
 import { AuthService } from '@auth0/auth0-angular';
-
+import { SearchService } from '../../search.service';
 
 interface Business {
   business_id: string,
@@ -29,14 +29,19 @@ interface Business {
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.css'
 })
-export class SearchResultsComponent {
-  @Input() businesses: Business[] = [];
+export class SearchResultsComponent implements OnInit{
+  businesses: Business[] = [];
   selectedBusiness: any;
   summary = '';
   loading = false;
   
-  constructor(public auth: AuthService, private dialog: MatDialog, private apiService: ApiService) {};
+  constructor(public auth: AuthService, private dialog: MatDialog, private apiService: ApiService, private searchService: SearchService) {};
 
+  ngOnInit(): void {
+    this.searchService.filteredBusinesses$.subscribe(businesses => {
+      this.businesses = businesses;
+    });
+  }
   selectBusiness(business: any) {
     this.loading = true;
     this.selectedBusiness = business;

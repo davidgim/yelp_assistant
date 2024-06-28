@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { setThrowInvalidWriteToSignalError } from '@angular/core/primitives/signals';
 import { filter } from 'rxjs';
+import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +11,8 @@ import { CommonModule } from '@angular/common';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { MatToolbar } from '@angular/material/toolbar';
 import { ApiService } from '../../api.service';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { SearchService } from '../../search.service';
 
 interface Business {
   business_id: string;
@@ -52,37 +54,38 @@ export class SearchFormComponent implements OnInit {
   showResults: boolean = false;
 
   private locationsDict: { [key: string]: string[] } = {};
+  constructor(private apiService: ApiService, private searchService: SearchService) { }
 
-  constructor(private apiService: ApiService) { }
 
-    ngOnInit() {
-      this.apiService.getAllLocations().subscribe({
-        next: (data: { state: string, city: string}[]) => {
-          this.locationsDict = data.reduce((acc, { state, city }) => {
-            if (!acc[state]) acc[state] = [];
-            acc[state].push(city);
-            return acc;
-          }, {} as { [key: string]: string[] });
-          this.states = Object.keys(this.locationsDict);
-          this.filteredStates = this.states;
-        },
-        error: (error) => console.error('Error fetching locations ', error)
-      });
-      this.apiService.getStates().subscribe({
-        next: (data: string[]) => {
-          this.states = data;
-          this.filteredStates = data;
-        },
-        error: (error) => console.error('Error fetching states:', error)
-      });
 
-      this.apiService.getCategories().subscribe({
-        next: (data: string[]) => {
-          this.categories = data;
-          this.filteredCategories = data;
-        },
-        error: (error) => console.error('Error fetching states:', error)
-      })
+  ngOnInit() {
+    this.apiService.getAllLocations().subscribe({
+      next: (data: { state: string, city: string}[]) => {
+        this.locationsDict = data.reduce((acc, { state, city }) => {
+          if (!acc[state]) acc[state] = [];
+          acc[state].push(city);
+          return acc;
+        }, {} as { [key: string]: string[] });
+        this.states = Object.keys(this.locationsDict);
+        this.filteredStates = this.states;
+      },
+      error: (error) => console.error('Error fetching locations ', error)
+    });
+    this.apiService.getStates().subscribe({
+      next: (data: string[]) => {
+         this.states = data;
+        this.filteredStates = data;
+      },
+       error: (error) => console.error('Error fetching states:', error)
+    });
+
+    this.apiService.getCategories().subscribe({
+      next: (data: string[]) => {
+         this.categories = data;
+         this.filteredCategories = data;
+       },
+       error: (error) => console.error('Error fetching states:', error)
+    })
   }
 
   handleSearch() {
@@ -90,6 +93,7 @@ export class SearchFormComponent implements OnInit {
       next: (data: Business[]) => {
         this.filteredBusinesses = data;
         this.showResults = true;
+        this.searchService.updateSearchResults(this.filteredBusinesses);
       },
       error: (error) => console.error('Error fetching search results:', error)
     });

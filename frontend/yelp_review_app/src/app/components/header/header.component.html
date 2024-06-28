@@ -1,7 +1,9 @@
 <mat-toolbar color="primary">
     <div class="header-container">
-        <h1 class="title">Yelping Hand</h1>
-        <span class="flexExpand"></span>
+        <a routerLink="/" class="title-link">     
+            <h1 class="title">Yelper</h1>
+        </a>
+        <app-search-form *ngIf="isSearchPage"></app-search-form>
         <div class="nav-bar-container">
             <app-nav-bar></app-nav-bar>
         </div>

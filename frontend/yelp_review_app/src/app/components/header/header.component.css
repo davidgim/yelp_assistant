@@ -11,6 +11,10 @@
   padding: 10px 20px; 
 }
 
+.title-link {
+    text-decoration: none;
+}
+
 .mat-toolbar {
   background: linear-gradient(90deg, #d21919, #cccccc); 
   color: white; 
@@ -27,6 +31,7 @@
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: space-between;
 }
 
 .nav-bar-container {

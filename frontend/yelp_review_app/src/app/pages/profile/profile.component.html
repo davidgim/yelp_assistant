@@ -1,20 +1,20 @@
-<div *ngIf="auth.user$ | async as user">
-    <h3>Username: {{ user.nickname }}</h3>
-    <h3>email: {{ user.email }}</h3>
+<div *ngIf="auth.user$ | async as user" class="profile-container">
+    <h3 class="profile-title">Username: {{ user.nickname }}</h3>
+    <h3 class="profile-title">Email: {{ user.email }}</h3>
 
-    <div>
-        <h3>Dietary Restrictions</h3>
+    <div class="section">
+        <h3 class="section-title">Dietary Restrictions</h3>
         <form class="new-restriction-form" (ngSubmit)="addDietaryRestriction(newDietaryRestriction)">
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="full-width-form-field">
                 <mat-label>Add dietary restriction</mat-label>
                 <input matInput type="text" [(ngModel)]="newDietaryRestriction" name="newDietaryRestriction" placeholder="Ex. Dairy, Vegan">
             </mat-form-field>
-            <button matSuffix mat-button  type="submit" class="search-button"><mat-icon >add</mat-icon></button>
+            <button matSuffix mat-button type="submit" class="add-button"><mat-icon>add</mat-icon></button>
         </form>
 
-        <mat-list>
-            <mat-list-item *ngFor="let restriction of dietaryRestrictions" class="custom-list-item">
-                <div class="restriction-list-item">
+        <mat-list class="list">
+            <mat-list-item *ngFor="let restriction of dietaryRestrictions" class="list-item">
+                <div class="list-item-content">
                     {{ restriction }}
                     <mat-icon class="close-icon" (click)="deleteDietaryRestriction(restriction)">close</mat-icon>
                 </div>
@@ -22,17 +22,15 @@
         </mat-list>
     </div>  
 
-    <div>
-        <h3>Saved Businesses</h3>
-        <mat-list>
-            <mat-list-item *ngFor="let business of favoriteBusinesses" (click)="getBusinessInformation(business.id)" class="custom-list-item">
-                <div class="business-list-item">
+    <div class="section">
+        <h3 class="section-title">Saved Businesses</h3>
+        <mat-list class="list">
+            <mat-list-item *ngFor="let business of favoriteBusinesses" (click)="getBusinessInformation(business.id)" class="list-item">
+                <div class="list-item-content">
                     {{ business.name }}
                     <mat-icon class="close-icon" (click)="deleteFavoriteBusiness(business); $event.stopPropagation()">close</mat-icon>
                 </div>
             </mat-list-item>
         </mat-list>
     </div>
-
-
 </div>
