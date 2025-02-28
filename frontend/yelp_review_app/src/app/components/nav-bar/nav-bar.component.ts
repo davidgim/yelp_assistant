@@ -1,54 +1,39 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { faUser, faPowerOff, faHouse, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  NgbCollapse,
-  NgbDropdown,
-  NgbDropdownMenu,
-  NgbDropdownToggle,
-} from '@ng-bootstrap/ng-bootstrap';
-
-import { Router, RouterLink } from '@angular/router';
+import { faHouse, faUser, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
   imports: [
+    CommonModule,
     FontAwesomeModule,
-    AsyncPipe,
-    NgbDropdownToggle,
-    NgbDropdownMenu,
-    NgbDropdown,
-    NgbCollapse,
-    NgIf,
-    RouterLink,
+    RouterModule
   ],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  isCollapsed = true;
-  faUser = faUser;
-  faPowerOff = faPowerOff;
   faHouse = faHouse;
+  faUser = faUser;
+  faRightToBracket = faRightToBracket;
   faRightFromBracket = faRightFromBracket;
-
   isAuth0Authenticated$ = this.auth.isAuthenticated$;
 
-  constructor(
-    public auth: AuthService,
-    @Inject(DOCUMENT) private doc: Document
-  ) {}
+  constructor(public auth: AuthService) {}
 
   loginWithRedirect() {
     this.auth.loginWithRedirect();
-
-    console.log(this.auth.isAuthenticated$);
   }
 
   logout() {
-    this.auth.logout({ logoutParams: { returnTo: this.doc.location.origin } })
+    this.auth.logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
   }
 }

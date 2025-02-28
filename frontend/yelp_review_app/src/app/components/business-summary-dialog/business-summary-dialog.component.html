@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>{{ data.name }}</h1>
-<div mat-dialog-content>
+<h1 class="dialog-header">{{ data.name }}</h1>
+<div class="dialog-content">
   <p>{{ data.summary }}</p>
 </div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
-  <button [disabled]="isDisabled" mat-button (click)="addToFavorites(data.name, data.businessId)">{{ favoritesText }}</button>
+<div class="dialog-actions">
+  <button class="close-button" mat-button mat-dialog-close>Close</button>
+  <button class="favorite-button" [disabled]="isDisabled" mat-button (click)="addToFavorites(data.name, data.businessId)">{{ favoritesText }}</button>
 </div>

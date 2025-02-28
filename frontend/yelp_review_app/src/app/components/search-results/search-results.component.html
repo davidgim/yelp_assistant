@@ -2,15 +2,27 @@
     <mat-spinner></mat-spinner>
 </div>
 
-<div class="results-container">
-    <div class="results-list">
-        <mat-list>
-            <mat-list-item *ngFor="let result of businesses" (click)="selectBusiness(result)" class="custom-list-item">
-                <div class="business-info">
-                    <span class="business-name">{{ result.name }}</span>
-                    <span class="business-address">{{ result.address }} {{ result.city }} {{ result.state }}</span>
-                </div>
-            </mat-list-item>
-        </mat-list>
+<div class="search-results-container" [class.loading]="loading">
+  <div class="results-header">
+    <div class="results-count">
+      {{ businesses.length }} results found
     </div>
+  </div>
+
+  <div class="results-list" *ngIf="businesses.length > 0">
+    <div class="result-item" *ngFor="let business of businesses" (click)="selectBusiness(business)">
+      <div class="business-name">
+        {{ business.name }}
+      </div>
+      <div class="business-address">
+        <fa-icon [icon]="faLocationDot"></fa-icon>
+        {{ business.address }}
+      </div>
+    </div>
+  </div>
+
+  <div class="no-results" *ngIf="businesses.length === 0">
+    <h3>No results found</h3>
+    <p>Try adjusting your search criteria or location</p>
+  </div>
 </div>

@@ -1,41 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+.header-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  height: 64px;
+  position: relative;
+}
 
 .title {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif; 
-  font-weight: 700; 
-  font-size: 2em; 
-  color: white; 
-  margin: 0; 
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
-  letter-spacing: 1px; 
-  padding: 10px 20px; 
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: white;
+  margin: 0;
+  letter-spacing: -0.5px;
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .title-link {
-    text-decoration: none;
+  text-decoration: none;
+  color: white;
+  margin-left: 48px;
+  margin-right: 32px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.title-link:hover .title {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+:host ::ng-deep .mat-toolbar {
+  background-color: #d32323;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  height: 64px;
 }
 
 .mat-toolbar {
-  background: linear-gradient(90deg, #d21919, #cccccc); 
   color: white; 
   height: 82px;
 }
-
 
 .flexExpand {
     flex: 1 1 auto;
 }
   
 
-.header-container {
+.nav-bar-container {
+  margin-left: auto;
   display: flex;
-  width: 100%;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
 }
 
-.nav-bar-container {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 16px;
+  }
+  
+  .title {
+    font-size: 24px;
+    padding: 6px 12px;
+  }
 }

@@ -1,1 +1,23 @@
-<button (click)="auth.loginWithRedirect()">Log in</button>
+<ng-container *ngIf="!isAuthenticated">
+    <button class="auth-button" (click)="login()">
+        <mat-icon>login</mat-icon>
+        Log In
+    </button>
+</ng-container>
+
+<div class="user-menu" *ngIf="isAuthenticated">
+    <span class="user-name">{{ user?.name }}</span>
+    <div class="user-avatar" [matMenuTriggerFor]="menu">
+        {{ user?.name?.charAt(0).toUpperCase() }}
+    </div>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
+    </mat-menu>
+</div>

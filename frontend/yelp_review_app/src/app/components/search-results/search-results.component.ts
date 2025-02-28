@@ -7,13 +7,18 @@ import { BusinessSummaryDialogComponent } from '../business-summary-dialog/busin
 import { ApiService } from '../../api.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { SearchService } from '../../search.service';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Router, RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 interface Business {
-  business_id: string,
-  name: string,
-  address: string,
-  city: string,
-  state: string
+  business_id: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  rating?: number;
+  distance?: number;
 }
 
 @Component({
@@ -24,25 +29,46 @@ interface Business {
     CommonModule,
     MatListModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterModule,
+    FontAwesomeModule
   ],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.css'
 })
-export class SearchResultsComponent implements OnInit{
+export class SearchResultsComponent implements OnInit {
   businesses: Business[] = [];
-  selectedBusiness: any;
+  selectedBusiness: Business | null = null;
   summary = '';
   loading = false;
+  faLocationDot = faLocationDot;
+  currentSort: 'rating' | 'distance' = 'rating';
   
-  constructor(public auth: AuthService, private dialog: MatDialog, private apiService: ApiService, private searchService: SearchService) {};
+  constructor(
+    public auth: AuthService, 
+    private dialog: MatDialog, 
+    private apiService: ApiService, 
+    private searchService: SearchService, 
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.searchService.filteredBusinesses$.subscribe(businesses => {
       this.businesses = businesses;
     });
   }
-  selectBusiness(business: any) {
+
+  sortByRating() {
+    this.currentSort = 'rating';
+    this.businesses.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  }
+
+  sortByDistance() {
+    this.currentSort = 'distance';
+    this.businesses.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+  }
+
+  selectBusiness(business: Business) {
     this.loading = true;
     this.selectedBusiness = business;
     this.auth.user$.subscribe((user) => {
@@ -53,44 +79,30 @@ export class SearchResultsComponent implements OnInit{
           this.loading = false;
           this.openDialog(business.name, business.business_id, this.summary);
         },
-        error: (error) => console.error('Error fetching summary:', error)
+        error: (error) => {
+          console.error('Error fetching summary:', error);
+          this.loading = false;
+        }
       });
-    })
-    
-  }
-
-  addToFavorites(business: any) {
-    this.auth.user$.subscribe((user) => {
-      if (user) {
-        const userId = user.sub as string;
-        const newFavorite = {
-          name: business.name,
-          id: business.business_id
-        };
-
-        this.apiService.updateFavoriteBusiness(userId, newFavorite).subscribe({
-          next: (data: any) => {
-          console.log('Updated favorites', data)
-          },
-          error: (error) => console.error('Error updating favorites', error)
-        });
-      } else {
-        console.error('User not logged in')
-      }
     });
   }
     
   openDialog(name: string, businessId: string, summary: string): void {
     const dialogRef = this.dialog.open(BusinessSummaryDialogComponent, {
-      data: { name, businessId, summary }
+      data: { name, businessId, summary },
+      width: '600px',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      autoFocus: false,
+      panelClass: 'business-summary-dialog'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.resetState();
-    })
+    });
   }
 
-  resetState() {
+  private resetState() {
     this.summary = '';
     this.selectedBusiness = null;
   }

@@ -6,13 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@auth0/auth0-angular';
 import { ApiService } from '../../api.service';
 
-interface Business {
-  business_id: string,
-  name: string,
-  address: string
-}
-
-
 @Component({
   selector: 'app-business-summary-dialog',
   standalone: true,
@@ -21,7 +14,11 @@ interface Business {
   styleUrl: './business-summary-dialog.component.css'
 })
 export class BusinessSummaryDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { name: string, businessId: string, summary: string }, public auth: AuthService, private apiService: ApiService) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { name: string, businessId: string, summary: string }, 
+    public auth: AuthService, 
+    private apiService: ApiService
+  ) {}
 
   favoritesText = 'Add To Favorites';
   isDisabled = false;
@@ -38,13 +35,23 @@ export class BusinessSummaryDialogComponent {
         this.apiService.updateFavoriteBusiness(userId, newFavorite).subscribe({
           next: (data: any) => {
             console.log('Updated favorites', data);
-            this.favoritesText = 'Added To Favorites!'
-            this.isDisabled = true
+            this.favoritesText = 'Added To Favorites!';
+            this.isDisabled = true;
           },
-          error: (error) => console.error('Error updating favorites', error)
+          error: (error) => {
+            console.error('Error updating favorites', error);
+            this.favoritesText = 'Error Adding to Favorites';
+            setTimeout(() => {
+              this.favoritesText = 'Add To Favorites';
+            }, 2000);
+          }
         });
       } else {
-        console.error('User not logged in')
+        console.error('User not logged in');
+        this.favoritesText = 'Please Log In First';
+        setTimeout(() => {
+          this.favoritesText = 'Add To Favorites';
+        }, 2000);
       }
     });
   }

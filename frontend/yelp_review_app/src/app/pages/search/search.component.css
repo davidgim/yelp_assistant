@@ -1,51 +1,102 @@
 .search-page {
-    position: relative;
-    text-align: center;
-    padding: 20px;
-    height: 100vh;
-    background: #f9f9f9;
+    min-height: calc(100vh - 64px);
+    background-color: #f5f5f5;
 }
 
-
 .placeholder-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh; /* Adjust as needed */
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 40px;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2d2d2d;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2d2d2d;
+    margin: 40px 0 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    text-align: left;
+}
+
+li {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 12px;
+    padding-left: 24px;
     position: relative;
-    z-index: 1;
+}
+
+li::before {
+    content: "•";
+    color: #d32323;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 240px;
+    background: linear-gradient(135deg, #d32323, #ff4242);
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    .placeholder-container {
+        padding: 40px 20px;
+        margin-top: 20px;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    p, li {
+        font-size: 16px;
+    }
 }
 
 .logo-image {
     max-width: 150px;
     margin-bottom: 20px;
-}
-
-h2, h3 {
-    margin: 10px 0;
-    color: #333;
-}
-
-p {
-    margin: 10px 0;
-    color: #666;
-}
-
-ul {
-    text-align: left;
-    margin: 10px 0;
-    color: #666;
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    margin: 5px 0;
 }
 
 .popular-searches {

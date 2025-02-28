@@ -25,14 +25,20 @@
   
 
 <nav class="header-navbar">
-    <a routerLink="/" class="nav-link-icon">
-        <fa-icon [icon]="faHouse" class="mr-1"></fa-icon>
+    <a routerLink="/" class="nav-link">
+        <fa-icon [icon]="faHouse"></fa-icon>
+        Home
     </a>
-    <a routerLink="/profile" class="nav-link-icon" *ngIf="this.auth.isAuthenticated$ | async">
-        <fa-icon [icon]="faUser" class="mr-1"></fa-icon>
+    <a routerLink="/profile" class="nav-link" *ngIf="this.auth.isAuthenticated$ | async">
+        <fa-icon [icon]="faUser"></fa-icon>
+        Profile
     </a>
-    <button id="qsLoginBtn" class="btn btn-primary nav-link" *ngIf="(isAuth0Authenticated$ | async) === false" (click)="loginWithRedirect()">Log in</button>
-    <button id="qsLogoutBtn" class="btn btn-link nav-link" *ngIf="auth.isAuthenticated$ | async" (click)="logout()">
-        <fa-icon [icon]="faRightFromBracket" class="mr-1"></fa-icon>Logout
+    <button id="qsLoginBtn" class="nav-link" *ngIf="(isAuth0Authenticated$ | async) === false" (click)="loginWithRedirect()">
+        <fa-icon [icon]="faRightToBracket"></fa-icon>
+        Log in
+    </button>
+    <button id="qsLogoutBtn" class="nav-link btn-link" *ngIf="auth.isAuthenticated$ | async" (click)="logout()">
+        <fa-icon [icon]="faRightFromBracket"></fa-icon>
+        Log out
     </button>
 </nav>

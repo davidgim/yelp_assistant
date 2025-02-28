@@ -1,8 +1,14 @@
 <div class="search-form-container">
     <form class="search-form" (ngSubmit)="handleSearch()">
-        <mat-form-field class="search-form-field">
+        <mat-form-field class="search-form-field" appearance="outline">
             <mat-label>State</mat-label>
-            <input type="text" matInput [matAutocomplete]="autoState" [(ngModel)]="state" name="state" (input)="filterStates()">
+            <input type="text" 
+                   matInput 
+                   [matAutocomplete]="autoState" 
+                   [(ngModel)]="state" 
+                   name="state" 
+                   (input)="filterStates()"
+                   placeholder="Enter state">
             <mat-autocomplete #autoState="matAutocomplete" (optionSelected)="onStateSelected()">
                 <mat-option *ngFor="let option of filteredStates" [value]="option">
                     {{ option }}
@@ -10,9 +16,15 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="search-form-field">
+        <mat-form-field class="search-form-field" appearance="outline">
             <mat-label>City</mat-label>
-            <input type="text" matInput [matAutocomplete]="autoCity" [(ngModel)]="city" name="city" (input)="filterCities()">
+            <input type="text" 
+                   matInput 
+                   [matAutocomplete]="autoCity" 
+                   [(ngModel)]="city" 
+                   name="city" 
+                   (input)="filterCities()"
+                   placeholder="Enter city">
             <mat-autocomplete #autoCity="matAutocomplete">
                 <mat-option *ngFor="let option of filteredCities" [value]="option">
                     {{ option }}
@@ -20,9 +32,15 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="search-form-field">
+        <mat-form-field class="search-form-field" appearance="outline">
             <mat-label>Category</mat-label>
-            <input type="text" matInput [matAutocomplete]="autoCategory" [(ngModel)]="category" name="category" (input)="filterCategories()">
+            <input type="text" 
+                   matInput 
+                   [matAutocomplete]="autoCategory" 
+                   [(ngModel)]="category" 
+                   name="category" 
+                   (input)="filterCategories()"
+                   placeholder="Restaurants, Auto Service, etc.">
             <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected()">
                 <mat-option *ngFor="let option of filteredCategories" [value]="option">
                     {{ option }}
@@ -30,15 +48,24 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="search-form-field">
+        <mat-form-field class="search-form-field" appearance="outline">
             <mat-label>Business Name</mat-label>
-            <input type="text" matInput [matAutocomplete]="autoBusiness" [(ngModel)]="businessName" name="businessName" (input)="filterBusinessNames()">
+            <input type="text" 
+                   matInput 
+                   [matAutocomplete]="autoBusiness" 
+                   [(ngModel)]="businessName" 
+                   name="businessName" 
+                   (input)="filterBusinessNames()"
+                   placeholder="Search by name">
             <mat-autocomplete #autoBusiness="matAutocomplete">
                 <mat-option *ngFor="let option of filteredBusinesses" [value]="option.name">
                     {{ option.name }}
                 </mat-option>
             </mat-autocomplete>
-            <button matSuffix mat-button  type="submit" class="search-button"><mat-icon >search</mat-icon></button>
         </mat-form-field>
+
+        <button type="submit" class="search-button" aria-label="Search">
+            <mat-icon>search</mat-icon>
+        </button>
     </form>
 </div>
