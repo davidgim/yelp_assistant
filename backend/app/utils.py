@@ -7,7 +7,7 @@ import json
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-testing_with_api = False
+testing_with_api = True
 
 def clean_text(text):
     return re.sub(r'\s+', ' ', text).strip()

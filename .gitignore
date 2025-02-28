@@ -45,3 +45,19 @@ testem.log
 Thumbs.db
 
 /backend/.env
+
+# Database dumps
+*.dump
+*.sql
+local_db_*
+
+# Cache files
+__pycache__/
+*.pyc
+
+# Firebase cache
+.firebase/
+
+# Environment files
+.env
+.env.*

@@ -63,6 +63,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     state = db.Column(db.String(2), nullable=False)
     city = db.Column(db.String(100), nullable=False)
+    __table_args__ = (db.UniqueConstraint('state', 'city', name='unique_state_city'),)
 
     def serialize(self):
         return {
