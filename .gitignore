@@ -47,18 +47,27 @@ Thumbs.db
 
 /backend/.env
 
-# Database dumps
+# Environment files
+.env
+.env.*
+*.env
+
+# Database dumps and backups
 *.dump
 *.sql
 local_db_*
 
-# Cache files
+# Python cache files
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Sensitive data files
+*credentials*
+*secret*
+*password*
+*config.json
 
 # Firebase cache
 .firebase/
-
-# Environment files
-.env
-.env.*
