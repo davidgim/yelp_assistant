@@ -29,4 +29,5 @@ resources I was using followed older versions of Angular, while I was attempting
 helped me through this challenge. 
 
 Demo:
-Coming soon
+
+https://yelp-assistant-app-123.firebaseapp.com/
