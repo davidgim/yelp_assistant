@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { setThrowInvalidWriteToSignalError } from '@angular/core/primitives/signals';
-import { filter } from 'rxjs';
+import { filter, forkJoin } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,36 +56,38 @@ export class SearchFormComponent implements OnInit {
   private locationsDict: { [key: string]: string[] } = {};
   constructor(private apiService: ApiService, private searchService: SearchService) { }
 
-
-
   ngOnInit() {
-    this.apiService.getAllLocations().subscribe({
-      next: (data: { state: string, city: string}[]) => {
-        this.locationsDict = data.reduce((acc, { state, city }) => {
+    // Load categories and all locations in parallel
+    forkJoin({
+      categories: this.apiService.getCategories(),
+      locations: this.apiService.getAllLocationsNoPagination() // Get all locations without pagination
+    }).subscribe({
+      next: (results) => {
+        // Process categories
+        this.categories = results.categories;
+        this.filteredCategories = this.categories;
+        
+        // Process locations for both states and city lookup
+        this.locationsDict = results.locations.locations.reduce((acc, { state, city }) => {
           if (!acc[state]) acc[state] = [];
-          acc[state].push(city);
+          if (!acc[state].includes(city)) { // Avoid duplicate cities
+            acc[state].push(city);
+          }
           return acc;
         }, {} as { [key: string]: string[] });
-        this.states = Object.keys(this.locationsDict);
+        
+        // Sort cities within each state alphabetically
+        Object.keys(this.locationsDict).forEach(state => {
+          this.locationsDict[state].sort();
+        });
+        
+        // Extract states from the locations dictionary
+        this.states = Object.keys(this.locationsDict).sort();
         this.filteredStates = this.states;
+        console.log('States loaded:', this.states.length);
       },
-      error: (error) => console.error('Error fetching locations ', error)
+      error: (error) => console.error('Error fetching data:', error)
     });
-    this.apiService.getStates().subscribe({
-      next: (data: string[]) => {
-         this.states = data;
-        this.filteredStates = data;
-      },
-       error: (error) => console.error('Error fetching states:', error)
-    });
-
-    this.apiService.getCategories().subscribe({
-      next: (data: string[]) => {
-         this.categories = data;
-         this.filteredCategories = data;
-       },
-       error: (error) => console.error('Error fetching states:', error)
-    })
   }
 
   handleSearch() {

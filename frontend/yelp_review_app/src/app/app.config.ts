@@ -18,19 +18,19 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideAnimationsAsync(),
-    //provideHttpClient(withInterceptors([authHttpInterceptorFn])),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authHttpInterceptorFn])),
     provideAuth0({
       domain: environment.auth0.domain,
       clientId: environment.auth0.clientId,
       authorizationParams: {
-        redirect_uri: environment.auth0.redirectUri
+        redirect_uri: environment.auth0.redirectUri,
+        audience: environment.auth0.audience
       },
-      // httpInterceptor: {
-      //   allowedList: [`${environment.auth0.apiUri}/*`],
-      // },
+      httpInterceptor: {
+        allowedList: [`${environment.apiUrl}/*`],
+      },
     }),
     importProvidersFrom(
       FormsModule,

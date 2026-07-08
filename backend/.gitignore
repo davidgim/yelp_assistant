@@ -6,3 +6,11 @@ __pycache__/
 app/config.py
 
 *.log
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Contains plaintext DB/Auth0/Groq credentials - never commit
+.ebextensions/01_envar.config

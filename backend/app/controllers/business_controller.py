@@ -1,8 +1,9 @@
 from flask_restful import Resource, reqparse
 from app.models import Business, Review
-from flask import request
+from flask import request, g
 import re
 from app.utils import clean_text, get_summary, get_management_api_token, get_user_metadata
+from app.auth import optional_auth
 
 class SearchBusiness(Resource):
     def get(self):
@@ -27,10 +28,10 @@ class SearchBusiness(Resource):
         return [business.serialize() for business in businesses]
 
 class SummarizeBusiness(Resource):
+    @optional_auth
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('businessId', type=str, required=True)
-        parser.add_argument('userId', type=str, required=False)
         args = parser.parse_args()
 
         business = Business.query.get(args['businessId'])
@@ -40,15 +41,15 @@ class SummarizeBusiness(Resource):
         reviews = Review.query.filter_by(business_id=args['businessId']).order_by(Review.useful.desc()).limit(5).all()
         if not reviews:
             return {'message': 'No reviews found for this business'}, 404
-        
+
 
         review_texts = " ".join([clean_text(review.text) for review in reviews])
 
         dietary_restrictions = None
 
-        if args['userId']:
+        if g.user_id:
             token = get_management_api_token()
-            user_metadata = get_user_metadata(args['userId'], token)
+            user_metadata = get_user_metadata(g.user_id, token)
             dietary_restrictions = user_metadata.get('dietary_restrictions')
 
         summary = get_summary(business, review_texts, dietary_restrictions)

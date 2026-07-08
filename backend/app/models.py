@@ -61,9 +61,12 @@ class Review(db.Model):
 class Location(db.Model):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
-    state = db.Column(db.String(2), nullable=False)
-    city = db.Column(db.String(100), nullable=False)
-    __table_args__ = (db.UniqueConstraint('state', 'city', name='unique_state_city'),)
+    state = db.Column(db.String(2), nullable=False, index=True)
+    city = db.Column(db.String(100), nullable=False, index=True)
+    __table_args__ = (
+        db.UniqueConstraint('state', 'city', name='unique_state_city'),
+        db.Index('idx_state_city', 'state', 'city')
+    )
 
     def serialize(self):
         return {

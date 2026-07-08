@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -10,10 +10,18 @@ COPY . .
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV FLASK_APP=app.py
+ENV FLASK_APP=wsgi.py
+ENV PORT=8080
 
 # Expose the port
 EXPOSE 8080
 
 # Run the application with Gunicorn
-CMD exec gunicorn --bind :8080 --workers 1 --threads 8 --timeout 0 app:app 
+CMD exec gunicorn --bind 0.0.0.0:8080 \
+    --workers 3 \
+    --threads 8 \
+    --timeout 120 \
+    --keep-alive 5 \
+    --max-requests 1000 \
+    --max-requests-jitter 50 \
+    wsgi:application

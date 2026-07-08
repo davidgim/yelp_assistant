@@ -1,11 +1,14 @@
 import re
 import os
+import time
 from groq import Groq
 import http.client
 import json
 
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+_management_token_cache = {'token': None, 'expires_at': 0}
 
 testing_with_api = True
 
@@ -29,6 +32,10 @@ def get_summary(business, reviews, dietary_restrictions=None):
 
 
 def get_management_api_token():
+    now = time.time()
+    if _management_token_cache['token'] and now < _management_token_cache['expires_at']:
+        return _management_token_cache['token']
+
     conn = http.client.HTTPSConnection(os.getenv('AUTH0_DOMAIN'))
     payload = json.dumps({
         "client_id": os.getenv('AUTH0_CLIENT_ID'),
@@ -43,9 +50,13 @@ def get_management_api_token():
 
     res = conn.getresponse()
     data = res.read()
-    print("data is this: ", data)
     token_info = json.loads(data.decode("utf-8"))
-    return token_info['access_token']
+
+    _management_token_cache['token'] = token_info['access_token']
+    # Refresh a minute early to avoid using a token that expires mid-request
+    _management_token_cache['expires_at'] = now + token_info.get('expires_in', 86400) - 60
+
+    return _management_token_cache['token']
 
 def get_user_metadata(user_id, token):
     conn = http.client.HTTPSConnection(os.getenv('AUTH0_DOMAIN'))

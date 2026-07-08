@@ -1,17 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5000';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  getAllLocations(): Observable<{ state: string, city: string }[]> { 
-    return this.http.get<any>(`${this.baseUrl}/location/locations`);
+  getAllLocations(page: number = 1, perPage: number = 50): Observable<{ 
+    locations: { state: string, city: string }[],
+    total: number,
+    page: number,
+    per_page: number,
+    total_pages: number
+  }> { 
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+    return this.http.get<any>(`${this.baseUrl}/location/locations`, { params });
+  }
+  
+  // New method to get all locations without pagination
+  getAllLocationsNoPagination(): Observable<{ 
+    locations: { state: string, city: string }[],
+    total: number,
+    page: number,
+    per_page: number,
+    total_pages: number
+  }> { 
+    let params = new HttpParams().set('per_page', '0'); // Special value to request all
+    return this.http.get<any>(`${this.baseUrl}/location/locations`, { params });
   }
 
   searchBusinesses(state: string, city: string, category: string, businessName: string): Observable<any> {
@@ -26,7 +48,7 @@ export class ApiService {
   getBusinessInformation(businessId: string): Observable<any> {
     let params = new HttpParams;
     if (businessId) params = params.set('business_id', businessId);
-    return this.http.get(`${this,this.baseUrl}/business/search/information`, { params });
+    return this.http.get(`${this.baseUrl}/business/search/information`, { params });
   }
 
   summarizeBusiness(businessId: string, userId?: string): Observable<any> {
